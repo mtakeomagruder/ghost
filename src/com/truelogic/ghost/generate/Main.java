@@ -59,7 +59,7 @@ public class Main
 		return(new Color(iRed, iGreen, iBlue));
 	}
 	
-	private static String randomCode(int iLength)
+/*	private static String randomCode(int iLength)
 	{
 		StringBuffer strCode = new StringBuffer();
 		
@@ -69,7 +69,7 @@ public class Main
 		}
 		
 		return(strCode.toString());
-	}
+	}*/
 	
 	private static int readChannel(String strChannel)
 	{

@@ -4,83 +4,65 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.*;
 
-public class Main implements EntryPoint, WindowResizeListener
+public class Main implements EntryPoint, WindowResizeListener, PrefetchListener
 {
 	private AbsolutePanel oScreen = new AbsolutePanel();
 	private Board oBoard;
 	private int iIndex = 0;
+    private Prefetch oPrefetch;
+    private boolean bLoading = false;
+    private boolean bDisplayed = false;
 	
 	public void onModuleLoad() 
 	{
-		Image.prefetch("image/bk.png");
-		Image.prefetch("image/grid.png");
-		Image.prefetch("image/code1" + getCodeVersion() + ".png");
-		Image.prefetch("image/code2" + getCodeVersion() + ".png");
-		Image.prefetch("image/code3" + getCodeVersion() + ".png");
-		Image.prefetch("image/code4" + getCodeVersion() + ".png");
-		Image.prefetch("image/code5" + getCodeVersion() + ".png");
-		Image.prefetch("image/code6" + getCodeVersion() + ".png");
-		Image.prefetch("image/code7" + getCodeVersion() + ".png");
-		Image.prefetch("image/code8" + getCodeVersion() + ".png");
-		Image.prefetch("image/dot.png");
-		Image.prefetch("image/worm.png");
+        Window.enableScrolling(false);
 
-		Image.prefetch("image/worm0001.png");
-		Image.prefetch("image/worm0010.png");
-		Image.prefetch("image/worm0011.png");
-		Image.prefetch("image/worm0100.png");
-		Image.prefetch("image/worm0101.png");
-		Image.prefetch("image/worm0110.png");
-		Image.prefetch("image/worm0111.png");
-		Image.prefetch("image/worm1000.png");
-		Image.prefetch("image/worm1001.png");
-		Image.prefetch("image/worm1010.png");
-		Image.prefetch("image/worm1011.png");
-		Image.prefetch("image/worm1100.png");
-		Image.prefetch("image/worm1101.png");
-		Image.prefetch("image/worm1110.png");
-		Image.prefetch("image/worm1111.png");
+        bLoading = false;
+        bDisplayed = false;
+        
+        oPrefetch = new Prefetch(this);
+
+        oPrefetch.prefetch("image/bk.png");
+		oPrefetch.prefetch("image/grid.png");
+		oPrefetch.prefetch("image/code1" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code2" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code3" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code4" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code5" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code6" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code7" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/code8" + getCodeVersion() + ".png");
+		oPrefetch.prefetch("image/dot.png");
+		oPrefetch.prefetch("image/worm.png");
+
+		oPrefetch.prefetch("image/worm0001.png");
+		oPrefetch.prefetch("image/worm0010.png");
+		oPrefetch.prefetch("image/worm0011.png");
+		oPrefetch.prefetch("image/worm0100.png");
+		oPrefetch.prefetch("image/worm0101.png");
+		oPrefetch.prefetch("image/worm0110.png");
+		oPrefetch.prefetch("image/worm0111.png");
+		oPrefetch.prefetch("image/worm1000.png");
+		oPrefetch.prefetch("image/worm1001.png");
+		oPrefetch.prefetch("image/worm1010.png");
+		oPrefetch.prefetch("image/worm1011.png");
+		oPrefetch.prefetch("image/worm1100.png");
+		oPrefetch.prefetch("image/worm1101.png");
+		oPrefetch.prefetch("image/worm1110.png");
+		oPrefetch.prefetch("image/worm1111.png");
 		
-		oBoard = new Board(167, 167, 167, 167, 6, 6);
-		oScreen.add(oBoard);
-		
-		Window.addWindowResizeListener(this);
-
-		if (!(getSegmentsPerInterval() == 1 || getSegmentsPerInterval() == 2 ||
-				getSegmentsPerInterval() == 4 || getSegmentsPerInterval() == 8))
-			{
-				Window.alert("SegmentsPerInterval must be 1, 2, 4 or 8!");
-				return;
-			}
-
-		if (getInterval() < 1)
-		{
-			Window.alert("Interval must be a positive integer!");
-			return;
-		}
-
-		RootPanel.get().add(oScreen);
-		onWindowResized(Window.getClientWidth(), Window.getClientHeight());
-	
-		Timer t = new Timer() 
-		{
-			public void run() 
-			{
-				if (iIndex == 0)
-					oBoard.shift();
-        	
-				for (int iSegIdx = 0; iSegIdx < getSegmentsPerInterval(); iSegIdx++)
-	        	{
-	        		oBoard.animate(iIndex);
-	        		iIndex++;
-	        	}
-
-	        	if (iIndex > 7)
-	        		iIndex = 0;
-	        }
-	    };
-
-	    t.scheduleRepeating(getInterval());	
+        Timer oTimer = new Timer() 
+        {
+            public void run() 
+            {
+                if (bLoading == false)
+                {
+                    endPrefetch();
+                }
+            } 
+        };      
+        
+        oTimer.schedule(1000);
 	}
 	
 	public static native String getCodeVersion() /*-{
@@ -104,4 +86,60 @@ public class Main implements EntryPoint, WindowResizeListener
     	
     	oScreen.setWidgetPosition(oBoard, iLeft < 0 ? 0 : iLeft, iTop < 0 ? 0 : iTop); 
     }
+    
+    public void beginPrefetch()
+    {
+        bLoading = true;
+    }
+    
+    public void endPrefetch()
+    {
+        if (bDisplayed == true)
+            return;
+        
+        bDisplayed = true;
+        
+        oBoard = new Board(167, 167, 167, 167, 6, 6);
+        oScreen.add(oBoard);
+
+        Window.addWindowResizeListener(this);
+
+        if (!(getSegmentsPerInterval() == 1 || getSegmentsPerInterval() == 2 ||
+                getSegmentsPerInterval() == 4 || getSegmentsPerInterval() == 8))
+            {
+                Window.alert("SegmentsPerInterval must be 1, 2, 4 or 8!");
+                return;
+            }
+
+        if (getInterval() < 1)
+        {
+            Window.alert("Interval must be a positive integer!");
+            return;
+        }
+
+        RootPanel.get().add(oScreen);
+        onWindowResized(Window.getClientWidth(), Window.getClientHeight());
+    
+        Timer t = new Timer() 
+        {
+            public void run() 
+            {
+                if (iIndex == 0)
+                    oBoard.shift();
+            
+                for (int iSegIdx = 0; iSegIdx < getSegmentsPerInterval(); iSegIdx++)
+                {
+                    oBoard.animate(iIndex);
+                    iIndex++;
+                }
+
+                if (iIndex > 7)
+                    iIndex = 0;
+            }
+        };
+
+        t.scheduleRepeating(getInterval()); 
+    }
+    
+    
 }

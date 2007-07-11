@@ -38,8 +38,13 @@ public class Board extends AbsolutePanel
 		oCodes[7] = new CodeVisualization(iWidth, iHeight, iImageWidth, iImageHeight);
 		add(oCodes[7], iBorder + ((iWidth + iMargin) * 2), iBorder + ((iWidth + iMargin) * 2));
 		
-		oWorm = new Worm();
-		add(oWorm, iBorder + ((iWidth + iMargin) * 1) - 14, iBorder + ((iWidth + iMargin) * 1) - 14);
+		AbsolutePanel oContainer = new AbsolutePanel();
+        
+        oContainer.setPixelSize(195, 195);
+        add(oContainer, iBorder + ((iWidth + iMargin) * 1) - 14, iBorder + ((iWidth + iMargin) * 1) - 14);
+        
+        oWorm = new Worm();
+		oContainer.add(oWorm, -13, -13);
 		
 		setPixelSize((iWidth + iMargin) * 3 + iMargin, (iHeight + iMargin) * 3 + iMargin); 
 	}

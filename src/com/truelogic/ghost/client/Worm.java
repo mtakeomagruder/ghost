@@ -35,10 +35,10 @@ public class Worm extends AbsolutePanel
 		String strImage = null;
 	}
 
-	private int iX = 7;
-	private int iY = 7;
+	private int iX = 8;
+	private int iY = 8;
 	
-	private int iWidth = 15;
+	private int iWidth = 17;
 	private int iSize = 13;
 	private int iLength = 32;
 
@@ -46,13 +46,13 @@ public class Worm extends AbsolutePanel
 	
 	public Worm()
 	{
-		setPixelSize(195, 195);
+		setPixelSize(221, 221);
 		
 		for (int iX = 0; iX < iWidth; iX++)
 			for (int iY = 0; iY < iWidth; iY++)
 				oySpaces[iX][iY] = new Space();
 
-		moveAbsolute(7, 7);
+		moveAbsolute(8, 8);
 	}
 	
 	static public XY function(int iIndex, int iX, int iY, int iWidth, int iHeight)
@@ -110,8 +110,8 @@ public class Worm extends AbsolutePanel
 	
 	private void moveDelta(int iDeltaX, int iDeltaY)
 	{
-		if ((iX + iDeltaX >= 1) && (iY + iDeltaY >= 1) &&
-			(iX + iDeltaX < iWidth - 1) && (iY + iDeltaY < iWidth - 1))
+		if ((iX + iDeltaX >= 2) && (iY + iDeltaY >= 2) &&
+			(iX + iDeltaX < iWidth - 2) && (iY + iDeltaY < iWidth - 2))
 		{
 			moveAbsolute(iX + iDeltaX, iY + iDeltaY);
 		}
