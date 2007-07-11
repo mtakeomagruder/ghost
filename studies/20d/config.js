@@ -12,3 +12,13 @@ function getCodeVersion()
 {
 	return('a');
 }
+
+function getOffsetX()
+{
+	return(0);
+}
+
+function getOffsetY()
+{
+	return(0);
+}

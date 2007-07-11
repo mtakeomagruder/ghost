@@ -76,6 +76,14 @@ public class Main implements EntryPoint, WindowResizeListener, PrefetchListener
 	public static native int getSegmentsPerInterval() /*-{
 	  return($wnd.getSegmentsPerInterval());
 	}-*/;
+
+    public static native int getOffsetX() /*-{
+      return($wnd.getOffsetX());
+    }-*/;
+
+    public static native int getOffsetY() /*-{
+    return($wnd.getOffsetY());
+  }-*/;
 	
     public void onWindowResized(int iWidth, int iHeight)
     {
@@ -84,7 +92,7 @@ public class Main implements EntryPoint, WindowResizeListener, PrefetchListener
     	int iLeft = (iWidth - 525) / 2;
     	int iTop = (iHeight - 525) / 2;
     	
-    	oScreen.setWidgetPosition(oBoard, iLeft < 0 ? 0 : iLeft, iTop < 0 ? 0 : iTop); 
+    	oScreen.setWidgetPosition(oBoard, iLeft + getOffsetX() < 0 ? 0 : iLeft + getOffsetX(), iTop + getOffsetY() < 0 ? 0 : iTop + getOffsetY()); 
     }
     
     public void beginPrefetch()
